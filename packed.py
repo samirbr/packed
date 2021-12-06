@@ -95,7 +95,7 @@ class Attributes(List):
         text = []
         text.append('{indent}{{\n'.format(indent=indent_str))
         for entry in self:
-            if not isinstance(entry, basestring):
+            if not isinstance(entry, str):
                 text.append(entry.compose(parser, indent=indent+1))
                 text.append('\n')
         text.append('{indent}}},\n'.format(indent=indent_str))
@@ -188,7 +188,7 @@ class PairedTag(object):
             text, _ = parser.parse(text, '</')
             text, _ = parser.parse(text, result.name)
             text, _ = parser.parse(text, '>')
-        except SyntaxError, e:
+        except SyntaxError as e:
             return text, e
 
         return text, result
@@ -257,7 +257,7 @@ class PackedBlock(List):
         indent_text = re.match(r' *', self.line_start).group(0)
         indent = len(indent_text) / 4
         for entry in self:
-            if isinstance(entry, basestring):
+            if isinstance(entry, str):
                 text.append(entry)
             else:
                 text.append(entry.compose(parser, indent=indent, first=True))
@@ -295,7 +295,7 @@ class CodeBlock(List):
     def compose(self, parser, attr_of=None):
         text = []
         for entry in self:
-            if isinstance(entry, basestring):
+            if isinstance(entry, str):
                 text.append(entry)
             else:
                 text.append(entry.compose(parser))
@@ -319,7 +319,7 @@ def to_html(entity):
         return entity.to_html()
     else:
         # Assume unicode string or compatible
-        return unicode(entity)
+        return str(entity)
 
 
 class Elem(object):
